@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eduardo Ramirez Lizardi — Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #f5f4f1;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --accent: #1a1a1a;
+  --grid-gap: 4px;
+  --header-h: 64px;
+  --radius: 14px;
+  --overlay-bg: rgba(10, 10, 10, 0.72);
+  --desc-bg: rgba(18, 18, 18, 0.78);
+  --desc-radius: 16px;
+  --transition: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { height: 100%; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+  padding: 0 clamp(16px, 4vw, 48px);
+  background: rgba(245, 244, 241, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.header-nav {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color var(--transition);
+  cursor: pointer;
+}
+
+.header-nav a:hover { color: var(--text); }
+
+/* ── PAGE SECTIONS ── */
+.page-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 48px);
+}
+
+/* ── ABOUT PANEL ── */
+.about-panel {
+  display: none;
+  padding: 80px clamp(16px, 4vw, 48px);
+  max-width: 720px;
+  margin: 0 auto;
+  animation: fadeUp 400ms ease both;
+}
+
+.about-panel.active { display: block; }
+
+.about-panel h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.about-panel p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+
+.about-panel .contact-row {
+  margin-top: 32px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.about-panel .contact-row a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.92rem;
+  border-bottom: 1.5px solid var(--text);
+  padding-bottom: 2px;
+  transition: opacity var(--transition);
+}
+
+.about-panel .contact-row a:hover { opacity: 0.6; }
+
+/* ── CONTACT PANEL ── */
+.contact-panel {
+  display: none;
+  padding: 80px clamp(16px, 4vw, 48px);
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fadeUp 400ms ease both;
+}
+
+.contact-panel.active { display: block; }
+
+.contact-panel h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.contact-panel p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+
+.contact-panel .contact-links {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-panel .contact-links a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity var(--transition);
+}
+
+.contact-panel .contact-links a:hover { opacity: 0.6; }
+
+.contact-panel .contact-links svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ── GRID ── */
+.gallery-section {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.gallery-section.hidden { display: none; }
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--grid-gap);
+}
+
+.photo-cell {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+  background: #e8e7e4;
+}
+
+.photo-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 400ms ease;
+}
+
+.photo-cell:hover img {
+  transform: scale(1.04);
+}
+
+.photo-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background var(--transition);
+  pointer-events: none;
+}
+
+.photo-cell:hover::after {
+  background: rgba(0,0,0,0.08);
+}
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 280ms ease;
+}
+
+.lightbox.open {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox.closing {
+  opacity: 0;
+}
+
+.lb-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 200ms;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+}
+
+.lb-close:hover { opacity: 1; }
+
+.lb-container {
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb-image {
+  max-width: 92vw;
+  max-height: 82vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.lb-image.switching { opacity: 0.3; }
+
+/* Description box */
+.lb-desc {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--desc-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: rgba(255,255,255,0.92);
+  padding: 14px 24px;
+  border-radius: var(--desc-radius);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: min(600px, 86vw);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease 100ms;
+}
+
+.lb-desc.visible { opacity: 1; }
+
+/* Nav arrows */
+.lb-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(18,18,18,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 200ms, transform 200ms;
+  z-index: 10;
+}
+
+.lb-arrow:hover {
+  background: rgba(18,18,18,0.78);
+}
+
+.lb-arrow.prev { left: clamp(8px, 2vw, 32px); }
+.lb-arrow.next { right: clamp(8px, 2vw, 32px); }
+
+/* Counter */
+.lb-counter {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.6);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.photo-cell {
+  animation: fadeUp 500ms ease both;
+}
+
+/* stagger is set via inline style */
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px;
+  }
+
+  .header-nav { gap: 20px; }
+
+  .lb-arrow { width: 40px; height: 40px; font-size: 1.1rem; }
+
+  .lb-desc { padding: 10px 18px; font-size: 0.84rem; }
+}
+
+@media (max-width: 440px) {
+  .photo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a class="brand" href="#" onclick="showGallery(); return false;">Eduardo R. Lizardi</a>
+  <nav>
+    <ul class="header-nav">
+      <li><a onclick="showAbout()">About</a></li>
+      <li><a onclick="showContact()">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ABOUT -->
+<div class="about-panel" id="aboutPanel">
+  <h1>About</h1>
+  <p>
+    I am a PhD student in Health Economics at the University of Oslo. My research explores labor market responses to health events, informal care, and migrant health.
+  </p>
+  <p>
+    In my free time, I photograph places, nature, and people — finding stories in light, texture, and the quiet moments in between.
+  </p>
+  <div class="contact-row">
+    <a href="https://www.linkedin.com/in/eramirezlizardi/" target="_blank" rel="noreferrer">LinkedIn</a>
+    <a href="https://www.instagram.com/edualbert/" target="_blank" rel="noreferrer">Instagram</a>
+    <a href="https://x.com/Ewwardo" target="_blank" rel="noreferrer">X / Twitter</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-panel" id="contactPanel">
+  <h1>Get in Touch</h1>
+  <p>For inquiries about prints, collaborations, or just to say hello.</p>
+  <div class="contact-links">
+    <a href="mailto:eduardorlizardi@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      eduardorlizardi@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/eramirezlizardi/" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <a href="https://www.instagram.com/edualbert/" target="_blank" rel="noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+      Instagram
+    </a>
+  </div>
+</div>
+
+<!-- GALLERY GRID -->
+<div class="page-section gallery-section" id="gallerySection">
+  <div class="photo-grid" id="photoGrid"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <span class="lb-counter" id="lbCounter"></span>
+  <button class="lb-arrow prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <button class="lb-arrow next" id="lbNext" aria-label="Next">&#8250;</button>
+  <div class="lb-container">
+    <img class="lb-image" id="lbImage" src="" alt="" />
+    <div class="lb-desc" id="lbDesc"></div>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   PHOTO DATA — edit this array to manage photos.
+   Each entry: { src, desc }
+   src  = path to image file
+   desc = caption shown in the lightbox overlay
+   ───────────────────────────────────────────── */
+const PHOTOS = [
+  { src: 'photos/photo01.jpg', desc: 'Morning light over the Oslo fjord, a quiet start to the day.' },
+  { src: 'photos/photo02.jpg', desc: 'Cobblestone alley in Lisbon — layers of time in every wall.' },
+  { src: 'photos/photo03.jpg', desc: 'Sierra Nevada foothills at golden hour.' },
+  { src: 'photos/photo04.jpg', desc: 'Street market in Caracas, colors and chaos.' },
+  { src: 'photos/photo05.jpg', desc: 'Winter birch forest near Nordmarka.' },
+  { src: 'photos/photo06.jpg', desc: 'The weight of fog on a coastal morning.' },
+  { src: 'photos/photo07.jpg', desc: 'Reflections in a rain-soaked piazza, Bologna.' },
+  { src: 'photos/photo08.jpg', desc: 'A stranger's silhouette against Kuopio sunset.' },
+  { src: 'photos/photo09.jpg', desc: 'San Diego harbor at dusk — still water, distant lights.' },
+  { src: 'photos/photo10.jpg', desc: 'Wild grasses bending under an autumn wind.' },
+  { src: 'photos/photo11.jpg', desc: 'Stone steps ascending into low clouds.' },
+  { src: 'photos/photo12.jpg', desc: 'Late afternoon shadows in an empty courtyard.' },
+];
+
+/* ── Build Grid ── */
+const grid = document.getElementById('photoGrid');
+
+PHOTOS.forEach((photo, i) => {
+  const cell = document.createElement('div');
+  cell.className = 'photo-cell';
+  cell.style.animationDelay = `${i * 60}ms`;
+  cell.setAttribute('role', 'button');
+  cell.setAttribute('tabindex', '0');
+  cell.setAttribute('aria-label', photo.desc);
+
+  const img = document.createElement('img');
+  img.src = photo.src;
+  img.alt = photo.desc;
+  img.loading = 'lazy';
+  img.onerror = function () {
+    // Placeholder gradient for missing images
+    this.style.display = 'none';
+    cell.style.background = `hsl(${(i * 37) % 360}, 8%, ${68 + (i % 4) * 5}%)`;
+  };
+
+  cell.appendChild(img);
+  cell.addEventListener('click', () => openLightbox(i));
+  cell.addEventListener('keydown', e => { if (e.key === 'Enter') openLightbox(i); });
+  grid.appendChild(cell);
+});
+
+/* ── Lightbox Logic ── */
+const lightbox = document.getElementById('lightbox');
+const lbImage  = document.getElementById('lbImage');
+const lbDesc   = document.getElementById('lbDesc');
+const lbCounter = document.getElementById('lbCounter');
+
+let currentIndex = 0;
+
+function openLightbox(index) {
+  currentIndex = index;
+  renderLightbox();
+  lightbox.classList.add('open');
+  lightbox.classList.remove('closing');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.add('closing');
+  setTimeout(() => {
+    lightbox.classList.remove('open', 'closing');
+    document.body.style.overflow = '';
+  }, 280);
+}
+
+function renderLightbox() {
+  const photo = PHOTOS[currentIndex];
+  lbImage.classList.add('switching');
+  setTimeout(() => {
+    lbImage.src = photo.src;
+    lbImage.alt = photo.desc;
+    lbImage.onload = () => {
+      lbImage.classList.remove('switching');
+    };
+    // Fallback if cached
+    if (lbImage.complete) lbImage.classList.remove('switching');
+  }, 120);
+
+  lbDesc.textContent = photo.desc;
+  lbDesc.classList.remove('visible');
+  setTimeout(() => lbDesc.classList.add('visible'), 200);
+
+  lbCounter.textContent = `${currentIndex + 1} / ${PHOTOS.length}`;
+}
+
+function navigate(dir) {
+  currentIndex = (currentIndex + dir + PHOTOS.length) % PHOTOS.length;
+  renderLightbox();
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => navigate(-1));
+document.getElementById('lbNext').addEventListener('click', () => navigate(1));
+
+lightbox.addEventListener('click', e => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight') navigate(1);
+});
+
+/* ── Touch swipe ── */
+let touchStartX = 0;
+lightbox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+lightbox.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+});
+
+/* ── Panel Navigation ── */
+function showAbout() {
+  document.getElementById('aboutPanel').classList.add('active');
+  document.getElementById('contactPanel').classList.remove('active');
+  document.getElementById('gallerySection').classList.add('hidden');
+}
+
+function showContact() {
+  document.getElementById('contactPanel').classList.add('active');
+  document.getElementById('aboutPanel').classList.remove('active');
+  document.getElementById('gallerySection').classList.add('hidden');
+}
+
+function showGallery() {
+  document.getElementById('aboutPanel').classList.remove('active');
+  document.getElementById('contactPanel').classList.remove('active');
+  document.getElementById('gallerySection').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
