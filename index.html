@@ -59,6 +59,7 @@ body {
   letter-spacing: -0.02em;
   color: var(--text);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .header-nav {
@@ -78,27 +79,23 @@ body {
   cursor: pointer;
 }
 
-.header-nav a:hover { color: var(--text); }
+.header-nav a:hover,
+.header-nav a.active { color: var(--text); }
 
-/* ── PAGE SECTIONS ── */
-.page-section {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 48px);
-}
-
-/* ── ABOUT PANEL ── */
-.about-panel {
+/* ── PANELS (About / Contact) ── */
+.panel {
   display: none;
   padding: 80px clamp(16px, 4vw, 48px);
   max-width: 720px;
   margin: 0 auto;
+}
+
+.panel.active {
+  display: block;
   animation: fadeUp 400ms ease both;
 }
 
-.about-panel.active { display: block; }
-
-.about-panel h1 {
+.panel h1 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
@@ -106,21 +103,21 @@ body {
   letter-spacing: -0.02em;
 }
 
-.about-panel p {
+.panel p {
   color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.75;
   margin-bottom: 16px;
 }
 
-.about-panel .contact-row {
+.panel .link-row {
   margin-top: 32px;
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
 }
 
-.about-panel .contact-row a {
+.panel .link-row a {
   color: var(--text);
   text-decoration: none;
   font-weight: 500;
@@ -130,42 +127,16 @@ body {
   transition: opacity var(--transition);
 }
 
-.about-panel .contact-row a:hover { opacity: 0.6; }
+.panel .link-row a:hover { opacity: 0.6; }
 
-/* ── CONTACT PANEL ── */
-.contact-panel {
-  display: none;
-  padding: 80px clamp(16px, 4vw, 48px);
-  max-width: 600px;
-  margin: 0 auto;
-  animation: fadeUp 400ms ease both;
-}
-
-.contact-panel.active { display: block; }
-
-.contact-panel h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 600;
-  margin-bottom: 24px;
-  letter-spacing: -0.02em;
-}
-
-.contact-panel p {
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.75;
-  margin-bottom: 12px;
-}
-
-.contact-panel .contact-links {
+.contact-links {
   margin-top: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.contact-panel .contact-links a {
+.contact-links a {
   color: var(--text);
   text-decoration: none;
   font-size: 1rem;
@@ -176,9 +147,9 @@ body {
   transition: opacity var(--transition);
 }
 
-.contact-panel .contact-links a:hover { opacity: 0.6; }
+.contact-links a:hover { opacity: 0.6; }
 
-.contact-panel .contact-links svg {
+.contact-links svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
@@ -188,6 +159,10 @@ body {
 .gallery-section {
   padding-top: 32px;
   padding-bottom: 64px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: clamp(16px, 4vw, 48px);
+  padding-right: clamp(16px, 4vw, 48px);
 }
 
 .gallery-section.hidden { display: none; }
@@ -203,7 +178,7 @@ body {
   aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
-  background: #e8e7e4;
+  background: #e0dfdb;
 }
 
 .photo-cell img {
@@ -211,7 +186,7 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 400ms ease;
+  transition: transform 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .photo-cell:hover img {
@@ -230,6 +205,24 @@ body {
 .photo-cell:hover::after {
   background: rgba(0,0,0,0.08);
 }
+
+/* Placeholder visible until image loads */
+.photo-cell .placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.photo-cell .placeholder svg {
+  width: 32px;
+  height: 32px;
+  opacity: 0.18;
+}
+
+.photo-cell.loaded .placeholder { display: none; }
 
 /* ── LIGHTBOX ── */
 .lightbox {
@@ -336,7 +329,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 200ms, transform 200ms;
+  transition: background 200ms;
   z-index: 10;
 }
 
@@ -369,8 +362,6 @@ body {
   animation: fadeUp 500ms ease both;
 }
 
-/* stagger is set via inline style */
-
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
   .photo-grid {
@@ -397,17 +388,17 @@ body {
 
 <!-- HEADER -->
 <header class="site-header">
-  <a class="brand" href="#" onclick="showGallery(); return false;">Eduardo R. Lizardi</a>
+  <a class="brand" id="navBrand" href="#">Eduardo R. Lizardi</a>
   <nav>
     <ul class="header-nav">
-      <li><a onclick="showAbout()">About</a></li>
-      <li><a onclick="showContact()">Contact</a></li>
+      <li><a id="navAbout" href="#">About</a></li>
+      <li><a id="navContact" href="#">Contact</a></li>
     </ul>
   </nav>
 </header>
 
 <!-- ABOUT -->
-<div class="about-panel" id="aboutPanel">
+<div class="panel" id="aboutPanel">
   <h1>About</h1>
   <p>
     I am a PhD student in Health Economics at the University of Oslo. My research explores labor market responses to health events, informal care, and migrant health.
@@ -415,7 +406,7 @@ body {
   <p>
     In my free time, I photograph places, nature, and people — finding stories in light, texture, and the quiet moments in between.
   </p>
-  <div class="contact-row">
+  <div class="link-row">
     <a href="https://www.linkedin.com/in/eramirezlizardi/" target="_blank" rel="noreferrer">LinkedIn</a>
     <a href="https://www.instagram.com/edualbert/" target="_blank" rel="noreferrer">Instagram</a>
     <a href="https://x.com/Ewwardo" target="_blank" rel="noreferrer">X / Twitter</a>
@@ -423,7 +414,7 @@ body {
 </div>
 
 <!-- CONTACT -->
-<div class="contact-panel" id="contactPanel">
+<div class="panel" id="contactPanel">
   <h1>Get in Touch</h1>
   <p>For inquiries about prints, collaborations, or just to say hello.</p>
   <div class="contact-links">
@@ -443,7 +434,7 @@ body {
 </div>
 
 <!-- GALLERY GRID -->
-<div class="page-section gallery-section" id="gallerySection">
+<div class="gallery-section" id="gallerySection">
   <div class="photo-grid" id="photoGrid"></div>
 </div>
 
@@ -474,12 +465,15 @@ const PHOTOS = [
   { src: 'photos/photo05.jpg', desc: 'Winter birch forest near Nordmarka.' },
   { src: 'photos/photo06.jpg', desc: 'The weight of fog on a coastal morning.' },
   { src: 'photos/photo07.jpg', desc: 'Reflections in a rain-soaked piazza, Bologna.' },
-  { src: 'photos/photo08.jpg', desc: 'A stranger's silhouette against Kuopio sunset.' },
+  { src: 'photos/photo08.jpg', desc: "A stranger's silhouette against Kuopio sunset." },
   { src: 'photos/photo09.jpg', desc: 'San Diego harbor at dusk — still water, distant lights.' },
   { src: 'photos/photo10.jpg', desc: 'Wild grasses bending under an autumn wind.' },
   { src: 'photos/photo11.jpg', desc: 'Stone steps ascending into low clouds.' },
   { src: 'photos/photo12.jpg', desc: 'Late afternoon shadows in an empty courtyard.' },
 ];
+
+/* ── SVG placeholder icon ── */
+const placeholderSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
 
 /* ── Build Grid ── */
 const grid = document.getElementById('photoGrid');
@@ -492,14 +486,19 @@ PHOTOS.forEach((photo, i) => {
   cell.setAttribute('tabindex', '0');
   cell.setAttribute('aria-label', photo.desc);
 
+  // Placeholder
+  const ph = document.createElement('div');
+  ph.className = 'placeholder';
+  ph.innerHTML = placeholderSVG;
+  cell.appendChild(ph);
+
   const img = document.createElement('img');
   img.src = photo.src;
   img.alt = photo.desc;
   img.loading = 'lazy';
+  img.onload = function () { cell.classList.add('loaded'); };
   img.onerror = function () {
-    // Placeholder gradient for missing images
-    this.style.display = 'none';
-    cell.style.background = `hsl(${(i * 37) % 360}, 8%, ${68 + (i % 4) * 5}%)`;
+    cell.style.background = `hsl(${(i * 37) % 360}, 6%, ${74 + (i % 4) * 4}%)`;
   };
 
   cell.appendChild(img);
@@ -508,12 +507,11 @@ PHOTOS.forEach((photo, i) => {
   grid.appendChild(cell);
 });
 
-/* ── Lightbox Logic ── */
+/* ── Lightbox ── */
 const lightbox = document.getElementById('lightbox');
 const lbImage  = document.getElementById('lbImage');
 const lbDesc   = document.getElementById('lbDesc');
 const lbCounter = document.getElementById('lbCounter');
-
 let currentIndex = 0;
 
 function openLightbox(index) {
@@ -538,17 +536,12 @@ function renderLightbox() {
   setTimeout(() => {
     lbImage.src = photo.src;
     lbImage.alt = photo.desc;
-    lbImage.onload = () => {
-      lbImage.classList.remove('switching');
-    };
-    // Fallback if cached
+    lbImage.onload = () => lbImage.classList.remove('switching');
     if (lbImage.complete) lbImage.classList.remove('switching');
   }, 120);
-
   lbDesc.textContent = photo.desc;
   lbDesc.classList.remove('visible');
   setTimeout(() => lbDesc.classList.add('visible'), 200);
-
   lbCounter.textContent = `${currentIndex + 1} / ${PHOTOS.length}`;
 }
 
@@ -560,10 +553,7 @@ function navigate(dir) {
 document.getElementById('lbClose').addEventListener('click', closeLightbox);
 document.getElementById('lbPrev').addEventListener('click', () => navigate(-1));
 document.getElementById('lbNext').addEventListener('click', () => navigate(1));
-
-lightbox.addEventListener('click', e => {
-  if (e.target === lightbox) closeLightbox();
-});
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 
 document.addEventListener('keydown', e => {
   if (!lightbox.classList.contains('open')) return;
@@ -572,7 +562,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') navigate(1);
 });
 
-/* ── Touch swipe ── */
+/* Touch swipe */
 let touchStartX = 0;
 lightbox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
 lightbox.addEventListener('touchend', e => {
@@ -580,24 +570,36 @@ lightbox.addEventListener('touchend', e => {
   if (Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
 });
 
-/* ── Panel Navigation ── */
-function showAbout() {
-  document.getElementById('aboutPanel').classList.add('active');
-  document.getElementById('contactPanel').classList.remove('active');
-  document.getElementById('gallerySection').classList.add('hidden');
+/* ── Navigation ── */
+const aboutPanel     = document.getElementById('aboutPanel');
+const contactPanel   = document.getElementById('contactPanel');
+const gallerySection = document.getElementById('gallerySection');
+const navAbout       = document.getElementById('navAbout');
+const navContact     = document.getElementById('navContact');
+const navBrand       = document.getElementById('navBrand');
+
+function showView(view) {
+  aboutPanel.classList.remove('active');
+  contactPanel.classList.remove('active');
+  gallerySection.classList.remove('hidden');
+  navAbout.classList.remove('active');
+  navContact.classList.remove('active');
+
+  if (view === 'about') {
+    aboutPanel.classList.add('active');
+    gallerySection.classList.add('hidden');
+    navAbout.classList.add('active');
+  } else if (view === 'contact') {
+    contactPanel.classList.add('active');
+    gallerySection.classList.add('hidden');
+    navContact.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function showContact() {
-  document.getElementById('contactPanel').classList.add('active');
-  document.getElementById('aboutPanel').classList.remove('active');
-  document.getElementById('gallerySection').classList.add('hidden');
-}
-
-function showGallery() {
-  document.getElementById('aboutPanel').classList.remove('active');
-  document.getElementById('contactPanel').classList.remove('active');
-  document.getElementById('gallerySection').classList.remove('hidden');
-}
+navBrand.addEventListener('click', e => { e.preventDefault(); showView('gallery'); });
+navAbout.addEventListener('click', e => { e.preventDefault(); showView('about'); });
+navContact.addEventListener('click', e => { e.preventDefault(); showView('contact'); });
 </script>
 
 </body>
